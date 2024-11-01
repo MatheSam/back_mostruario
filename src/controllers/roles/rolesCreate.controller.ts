@@ -1,21 +1,23 @@
 import { Request, Response } from "express";
 import rolesCreateService from "../../services/roles/rolesCreate.service";
+import { AppError } from "../../errors";
+import { handleError } from "../../middlewares/err.mid";
 
-const rolesCreateController = (
+const rolesCreateController = async (
   req: Request,
   res: Response
-): any => {
+): Promise<any> => {
   try {
-    const {name} = req.body;
-    const role = rolesCreateService({name});
+    const {name, permissionId} = req.body;
+    const role = await rolesCreateService({name, permissionId});
 
     return res.status(201).send(role);
     
-  } catch (err) {
-    if (err instanceof Error) {
-      return res.status(400).send({
-        "message": err.message
-      })
+  } catch (error) {
+    if (error instanceof AppError) {
+      handleError(error, res);
+    } else {
+      return res.status(409).json({status: 404, message: 'Erro desconhecido, contate o suporte' });
     }
   }
 }

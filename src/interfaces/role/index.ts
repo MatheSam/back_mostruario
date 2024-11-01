@@ -5,4 +5,5 @@ export interface Iroles {
 
 export interface IrolesCreate {
   name: string;
+  permissionId: any;
 }

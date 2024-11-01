@@ -1,20 +1,21 @@
 import { Request, Response } from "express";
 import rolesListService from "../../services/roles/roleList.service";
+import { AppError } from "../../errors";
+import { handleError } from "../../middlewares/err.mid";
 
-const rolesListController = (
+const rolesListController = async (
   req: Request,
   res: Response
-): any => {
+): Promise<any> => {
   try {
-    const roles = rolesListService();
+    const roles = await rolesListService();
     return res.status(200).send(roles);
 
-  } catch (err) {
-    if (err instanceof Error) {
-      return res.status(400).send({
-        "error": err.name,
-        "message": err.message
-      })
+  } catch (error) {
+    if (error instanceof AppError) {
+      handleError(error, res);
+    } else {
+      return res.status(409).json({status: 404, message: 'Erro desconhecido, contate o suporte' });
     }
   }
 }
