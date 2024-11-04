@@ -4,7 +4,7 @@ import { AppError } from "../../errors";
 import { Users } from "../../entities/users.entity";
 import { v4 as uuid } from "uuid";
 
-const faqCreateService = async (dados: any) => {
+const faqCreateService = async (dados: any, email: string) => {
   const faqRepo = AppDataSource.getRepository(Faq);
   const userRepo = AppDataSource.getRepository(Users);
 
@@ -18,11 +18,7 @@ const faqCreateService = async (dados: any) => {
     throw new AppError("Já existe um FAQ com esse nome.", 400);
   }
 
-  if (!dados.user) {
-    throw new AppError('ID do usuário não fornecido!', 400);
-  }
-
-  const user = await userRepo.findOne({where: {id: dados.user}});
+  const user = await userRepo.findOne({where: {email}});
 
   if (!user) {
     throw new AppError('Usuário não encontrado!', 400) 

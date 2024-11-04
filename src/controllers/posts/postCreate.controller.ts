@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { AppError } from "../../errors";
-import { handleError } from "../../middlewares/err.mid";
+import { handleError, isAdmOrPermission } from "../../middlewares/err.mid";
 import postCreateService from "../../services/posts/postCreate.services";
 
 const postCreateController = async (
@@ -8,7 +8,9 @@ const postCreateController = async (
   res: Response
 ): Promise<any> => {
   try {
-    const post = await postCreateService(req.body);
+
+    await isAdmOrPermission(req.userEmail, 'post');
+    const post = await postCreateService(req.body, req.userEmail);
 
     return res.status(200).send(post);
   } catch (error) {

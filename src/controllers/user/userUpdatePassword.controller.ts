@@ -12,7 +12,7 @@ const userUpdatePasswordController = async (req: Request, res: Response): Promis
       throw new Error("Por gentileza, informar uma senha")
     }
 
-    await userUpdatePasswordService(email, password)
+    await userUpdatePasswordService(email!, password)
     return res.status(201).json({ message: "Senha atualizada com sucesso!" })
 
   } catch (error) {

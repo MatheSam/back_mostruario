@@ -9,7 +9,7 @@ const faqUpdateController = async (
 ): Promise<any> => {
   try {
     const id = req.params;
-    const faq = await faqUpdateService(id, req.body);
+    const faq = await faqUpdateService(id, req.body, req.userEmail);
 
     return res.status(200).json(faq);
   } catch (error) {

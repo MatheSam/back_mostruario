@@ -1,4 +1,4 @@
-import { handleError } from "../../middlewares/err.mid";
+import { handleError, isAdm } from "../../middlewares/err.mid";
 import { AppError } from "../../errors";
 import userSoftDeleteService from "../../services/user/userSoftDelete.service";
 import { Request, Response } from "express";
@@ -6,9 +6,10 @@ import { Request, Response } from "express";
 const userSoftDeleteController = async (req: Request, res: Response): Promise<any> => {
   try {
     const id = req.params;
+    
+    await isAdm(req.userEmail);
     await userSoftDeleteService(id);
 
-    // return res.status(201).json(user)
     return res.status(200).json({"message": "Usuário inativado com sucesso!"})
   } catch (error) {
     if (error instanceof AppError) {

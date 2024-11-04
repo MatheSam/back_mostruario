@@ -1,15 +1,16 @@
 import { AppDataSource } from "../../data-source";
 import { AppError } from "../../errors";
 import { Users } from "../../entities/users.entity";
-import { Roles } from "../../entities/role.entity";
 import bcrypt from 'bcrypt';
+import { isAdm, isOwner } from "../../middlewares/err.mid";
 
-const userUpdateService = async (id: any, data: any): Promise<any> => {
+const userUpdateService = async (id: any, data: any, email_auth: any): Promise<any> => {
   const userRepo = AppDataSource.getRepository(Users);
-  const roleRepo = AppDataSource.getRepository(Roles);
-  const {name, password, email} = data;
+  const {name, password, email, is_adm, is_active, is_faq, is_post, is_product, is_user} = data;
 
   const user = await userRepo.findOneBy(id);
+
+  await isOwner(user?.email, email_auth);
 
   if (!user) {
     throw new AppError("Usuário não encontrado!", 400);
@@ -19,22 +20,21 @@ const userUpdateService = async (id: any, data: any): Promise<any> => {
     throw new AppError("Email já cadastrado!", 400);
   }
 
-  if (data.roleId) {
-    const role = await roleRepo.findOne({where: {id: data.roleId}});
-
-    if (!role) {
-      throw new AppError("Cargo não encontrado!", 400);
-    }
-
-    user.roles = role;
-  }
-
   user.name = name || user.name;
   user.email = email || user.email;
-  user.password = password ? bcrypt.hashSync(password, 10) : user.password;
+  
+  if (is_post || is_adm || is_user || is_post || is_active || is_product || is_faq ) {
+    await isAdm(email_auth);
+    
+    user.is_adm = is_adm || user.is_adm;
+    user.is_faq = is_faq || user.is_faq;
+    user.is_post = is_post || user.is_post;
+    user.is_user = is_user || user.is_user;
+    user.is_active = is_active || user.is_active;
+    user.is_product = is_product || user.is_product;
+  }
 
   await userRepo.save(user);
-
   return user;
 }
 

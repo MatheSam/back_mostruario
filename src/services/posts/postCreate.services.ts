@@ -4,7 +4,7 @@ import { AppError } from "../../errors";
 import { Users } from "../../entities/users.entity";
 import { v4 as uuid } from "uuid";
 
-const postCreateService = async (dados: any) => {
+const postCreateService = async (dados: any, email: string) => {
   const postRepo = AppDataSource.getRepository(Posts);
   const userRepo = AppDataSource.getRepository(Users);
 
@@ -18,21 +18,13 @@ const postCreateService = async (dados: any) => {
     throw new AppError("Já existe uma notícia/publicação com esse nome.", 400);
   }
 
-  if (!dados.user) {
-    throw new AppError('ID do usuário não fornecido!', 400);
-  }
-
-  const user = await userRepo.findOne({where: {id: dados.user}});
-
-  if (!user) {
-    throw new AppError('Usuário não encontrado!', 400) 
-  }
+  const user = await userRepo.findOne({where: {email}});
 
   const post = postRepo.create({
     id: uuid(),
     title,
     descr,
-    users: {id: user.id, name: user.name}
+    users: {id: user!.id, name: user!.name}
   })
 
   await postRepo.save(post);

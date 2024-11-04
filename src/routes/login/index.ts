@@ -4,6 +4,6 @@ import { authUser } from "../../middlewares/authUser.mid";
 
 const loginRoutes = Router();
 
-loginRoutes.post('', authUser, loginController);
+loginRoutes.post('', loginController);
 
 export default loginRoutes;

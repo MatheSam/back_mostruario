@@ -20,6 +20,21 @@ export class Users {
   @Column({ type: "boolean", default: true })
   is_active!: boolean;
 
+  @Column({ type: "boolean", default: false })
+  is_adm!: boolean;
+
+  @Column({ type: "boolean", default: false })
+  is_faq!: boolean;
+
+  @Column({ type: "boolean", default: false })
+  is_post!: boolean;
+
+  @Column({ type: "boolean", default: false })
+  is_user!: boolean;
+
+  @Column({ type: "boolean", default: false })
+  is_product!: boolean;
+
   @OneToMany(() => Posts, (posts) => posts.users)
   posts?: Posts;
 

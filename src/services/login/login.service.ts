@@ -13,11 +13,15 @@ const loginService = async ({ email, password }: any) => {
   const user = users.find(user => user.email == email);
 
   if (!user) {
-    throw new AppError('Usuário não encontrado', 400)
+    throw new AppError("Email e/ou senha está incorreto", 400)
   };
 
   if (!bcrypt.compareSync(password, user.password)) {
     throw new AppError("Email e/ou senha está incorreto", 400)
+  }
+
+  if (!user?.is_active) {
+    throw new AppError("Usuário não ativo na base, contatar o suporte!", 400)
   }
 
   const token = jwt.sign(

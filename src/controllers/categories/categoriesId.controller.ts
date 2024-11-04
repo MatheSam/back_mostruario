@@ -1,19 +1,17 @@
 import { AppError } from "../../errors";
 import { handleError } from "../../middlewares/err.mid";
-import userIdListService from "../../services/user/userIdList.service";
+import postIdListService from "../../services/posts/postIdList.service";
 import { Request, Response } from "express";
 
-const userIdListController = async (
+const postIdListController = async (
   req: Request,
   res: Response
 ): Promise<any> => {
   try {
     const id = req.params;
-    const email = req.userEmail
-    
-    const user = await userIdListService(id, email);
+    const post = await postIdListService(id);
+    return res.status(200).send(post);
 
-    return res.status(200).send(user);
   } catch (error) {
     if (error instanceof AppError) {
       handleError(error, res);
@@ -24,4 +22,4 @@ const userIdListController = async (
 
 }
 
-export default userIdListController;
+export default postIdListController;

@@ -5,9 +5,6 @@ const userListService = async () => {
   const usersRepo = AppDataSource.getRepository(Users);
   return usersRepo.find({
     order: {name: "ASC"},
-    relations: {
-      roles: true
-    }
   });
 }
 

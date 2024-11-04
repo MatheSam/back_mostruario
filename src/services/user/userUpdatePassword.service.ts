@@ -1,6 +1,7 @@
 import { AppDataSource } from "../../data-source"
 import { Users } from "../../entities/users.entity"
 import bcrypt from "bcrypt"
+import { AppError } from "../../errors"
 
 const userUpdatePasswordService = async (email: string, password: string) => {
 
@@ -11,7 +12,7 @@ const userUpdatePasswordService = async (email: string, password: string) => {
   const account = users.find(user => user.email === email)
 
   if (bcrypt.compareSync(password, account!.password)) {
-    throw new Error("A senha não pode ser a mesma da atual!")
+    throw new AppError("A senha não pode ser a mesma da atual.")
   }
 
   const newPassword = bcrypt.hashSync(password, 10)

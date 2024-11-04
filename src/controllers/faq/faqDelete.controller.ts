@@ -5,8 +5,7 @@ import { Request, Response } from "express";
 
 const faqDeleteController = async (req: Request, res: Response): Promise<any> => {
   try {
-    const id = req.params;
-    await faqDeleteService(id);
+    await faqDeleteService(req.params, req.userEmail);
 
     return res.status(200).json({"message": "FAQ deletado!"})
   } catch (error) {

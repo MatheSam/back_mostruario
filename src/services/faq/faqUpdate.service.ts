@@ -1,15 +1,22 @@
 import { AppDataSource } from "../../data-source";
 import { AppError } from "../../errors";
 import { Faq } from "../../entities/faq.entity";
+import { isOwner } from "../../middlewares/err.mid";
 
-const faqUpdateService = async (id: any, data: any): Promise<any> => {
+const faqUpdateService = async (id: any, data: any, email: string): Promise<any> => {
   const faqRepo = AppDataSource.getRepository(Faq);
   const {title, descr, is_active} = data;
 
-  const faq = await faqRepo.findOneBy(id);
+  const faq = await faqRepo.findOne({
+    where: {id: id.id},
+    relations: ["users"]
+  });
+
   if (!faq) {
     throw new AppError("FAQ não encontrado!", 400);
   }
+
+  await isOwner(faq.users.email, email);
 
   if (title && title.toLowerCase() == faq.title.toLowerCase()) {
     throw new AppError("Título já cadastrado!", 400);
@@ -21,7 +28,13 @@ const faqUpdateService = async (id: any, data: any): Promise<any> => {
 
   await faqRepo.save(faq);
 
-  return faq;
+  return {
+    ...faq,
+    users: {
+      id: faq.users.id,
+      name: faq.users.name
+    }
+  };
 }
 
 export default faqUpdateService;

@@ -9,11 +9,11 @@ import { authUser } from "../../middlewares/authUser.mid";
 
 const userRoutes = Router();
 
-userRoutes.post('', userCreateController);
-userRoutes.get('', userListController);
-userRoutes.get('/:id', userIdListController);
-userRoutes.delete('/:id', userSoftDeleteController);
-userRoutes.patch('/:id', userUpdateController);
+userRoutes.post('', authUser, userCreateController);
+userRoutes.get('', authUser, userListController);
+userRoutes.get('/:id', authUser, userIdListController);
+userRoutes.delete('/:id', authUser, userSoftDeleteController);
+userRoutes.patch('/:id', authUser, userUpdateController);
 userRoutes.patch('/:id/alterar_senha', authUser, userUpdatePasswordController);
 
 export default userRoutes;
