@@ -47,7 +47,7 @@ export const isAdmOrPermission = async (auth_email: string, type: string) => {
   } else if (type == 'product') {
     permission = user?.is_product
   }
-
+  
   if (!user?.is_adm && !permission) {
     throw new AppError('Você não tem permissão para acessar e/ou fazer modificações!', 403);
   }

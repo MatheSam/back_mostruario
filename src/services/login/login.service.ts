@@ -7,9 +7,7 @@ import { AppError } from "../../errors";
 const loginService = async ({ email, password }: any) => {
   const userRepo = AppDataSource.getRepository(Users);
 
-  const users = await userRepo.find({ relations: {
-    roles: true
-  }});
+  const users = await userRepo.find();
   const user = users.find(user => user.email == email);
 
   if (!user) {
@@ -26,8 +24,7 @@ const loginService = async ({ email, password }: any) => {
 
   const token = jwt.sign(
     {
-      email,
-      roleId: user.roles?.id
+      email
     },
     String(process.env.JWT_SECRET),
     { expiresIn: '5d' },

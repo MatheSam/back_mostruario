@@ -1,7 +1,6 @@
 import { Entity, Column, CreateDateColumn, UpdateDateColumn, PrimaryColumn, OneToMany, OneToOne, JoinColumn, ManyToOne } from "typeorm";
 import { v4 as uuid } from "uuid"
 import { Posts } from "./posts.entity";
-import { Roles } from "./role.entity";
 
 @Entity("")
 export class Users {
@@ -37,10 +36,6 @@ export class Users {
 
   @OneToMany(() => Posts, (posts) => posts.users)
   posts?: Posts;
-
-  @ManyToOne(() => Roles, { eager: false })
-  @JoinColumn()
-  roles?: Roles;
 
   @CreateDateColumn({ type: "datetime", default: () => "CURRENT_TIMESTAMP" })
   created_at!: Date;

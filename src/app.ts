@@ -1,25 +1,41 @@
 import 'reflect-metadata';
 import express from 'express';
-// import rolesRoutes from './routes/roles';
 import { AppDataSource } from './data-source';
-// import permissionsRoutes from './routes/permissions';
-import userRoutes from './routes/users';
-import faqRoutes from './routes/faq';
-import postRoutes from './routes/posts';
+import { postRoutesClient, faqRoutesClient, categoryRoutesClient } from './routes/client';
+
+import userRoutes from './routes/employee/users';
 import loginRoutes from './routes/login';
-import categoriesRoutes from './routes/categories';
+import faqRoutes from './routes/employee/faq';
+import postRoutes from './routes/employee/posts';
+import categoriesRoutes from './routes/employee/categories';
+import subCategoriesRoutes from './routes/employee/subcategories';
+import productsRoutes from './routes/employee/product';
+import marcasRoutes from './routes/employee/marcas';
+import colorsRoutes from './routes/employee/colors';
+import sizesRoutes from './routes/employee/sizes';
+import gendersRoutes from './routes/employee/genders';
 
 const app = express();
 
 app.use(express.json());
-
 app.use('/login', loginRoutes);
-// app.use('/cargos', rolesRoutes);
-// app.use('/permissoes', permissionsRoutes);
-app.use('/usuarios', userRoutes);
-app.use('/faq', faqRoutes);
-app.use('/publicacoes', postRoutes);
-app.use('/categorias', categoriesRoutes);
+
+// ROTAS CLIENTE
+app.use('/faq', faqRoutesClient);
+app.use('/publicacoes', postRoutesClient);
+app.use('/categorias', categoryRoutesClient);
+
+// ROTAS USUÁRIO
+app.use('/dashboard/usuarios', userRoutes)
+app.use('/dashboard/faq', faqRoutes);
+app.use('/dashboard/publicacoes', postRoutes)
+app.use('/dashboard/categorias', categoriesRoutes);
+app.use('/dashboard/subcategorias', subCategoriesRoutes);
+app.use('/dashboard/produtos', productsRoutes);
+app.use('/dashboard/marcas', marcasRoutes);
+app.use('/dashboard/cores', colorsRoutes);
+app.use('/dashboard/tamanhos', sizesRoutes);
+app.use('/dashboard/generos', gendersRoutes);
 
 AppDataSource.initialize()
   .then(() => {
