@@ -29,6 +29,7 @@ export const subCategoryListClient = async (req: Request, res: Response): Promis
         "prod.title",
         "prod.id",
         "prod.url",
+        "prod.short_descr"
       ])
       .getMany());
   } catch (error) {

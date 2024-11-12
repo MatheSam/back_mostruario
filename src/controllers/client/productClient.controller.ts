@@ -29,6 +29,17 @@ export const productListClient = async (req: Request, res: Response): Promise<an
         "prod.title",
         "prod.id",
         "prod.url",
+        "prod.short_descr",
+        "prod.subcategory",
+        "prod.is_active",
+        "prod.price",
+        "prod.promotion",
+        "prod.a_vista",
+        "prod.juros",
+        "prod.parcelado",
+        "prod.qtde_parcelado",
+        "prod.caracteristicas",
+        "prod.descr" 
       ])
       .getMany());
   } catch (error) {

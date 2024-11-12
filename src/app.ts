@@ -1,5 +1,6 @@
 import 'reflect-metadata';
 import express from 'express';
+import cors from 'cors';
 import { AppDataSource } from './data-source';
 import { postRoutesClient, faqRoutesClient, categoryRoutesClient } from './routes/client';
 
@@ -18,6 +19,7 @@ import gendersRoutes from './routes/employee/genders';
 const app = express();
 
 app.use(express.json());
+app.use(cors({ origin: 'http://localhost:3000' }));
 app.use('/login', loginRoutes);
 
 // ROTAS CLIENTE
@@ -45,5 +47,4 @@ AppDataSource.initialize()
     console.error("Error during Data Source initialization", err)
   })
 
-
-app.listen(3000);
+app.listen(3001);

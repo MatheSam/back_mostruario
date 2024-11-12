@@ -20,7 +20,7 @@ export class SubCategories {
   @ManyToOne(() => Categories, (category) => category.subcategories, {nullable: false})
   category?: Categories;
 
-  @OneToMany(() => Products, (products) => products.subcategory)
+  @OneToMany(() => Products, (products) => products.subcategory, {eager: true})
   products?: Products[];
 
   @CreateDateColumn({ type: "datetime", default: () => "CURRENT_TIMESTAMP" })
